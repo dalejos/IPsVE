@@ -1,7 +1,18 @@
+#URL de la lista de IP, segmentos, AS y dominios.
+:local urlFile "https://raw.githubusercontent.com/dalejos/IPsVE/main/listas/lista.txt";
+
+#Nombre del archivo local donde se guardara la lista.
+:local fileName "lista.txt";
+
+#Nombre de la lista para crear en /ip/firewall/address-list/
+:local listName "bancos";
+
 
 :local fetchFile;
 :set fetchFile do={
-    :return "";
+	:local fromUrl $1;
+	:local toDstPath $2;
+    return [/tool/fetch url=$fromUrl output=file dst-path=$toDstPath as-value];
 }
 
 :local isReserved;
@@ -128,10 +139,15 @@
 :set ($dataList->"segment") ({});
 :set ($dataList->"domain") ({});
 
-:local addressPath "";
-:local listName "lista.txt";
+:local fetchResult [$fetchFile $urlFile $fileName];
 
-:local listFile [$loadFile $listName];
+:if (!(($fetchResult->"status") = "finished")) do={
+	[$putError ("Error descargando archivo: $urlFile, status: " . ($fetchResult->"status"))];
+} else={
+	:delay 2s
+}
+
+:local listFile [$loadFile $fileName];
 
 :if (!($listFile->"error")) do={
 	:local index 0;
@@ -279,8 +295,6 @@
 	:set ($dataList->"ipv4") $ipv4ListTemp;
 
 #Agregando lista
-
-	:local listName "bancos";
 
 	:put "";
 	:put "Creando lista...";
