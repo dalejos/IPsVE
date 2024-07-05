@@ -1,5 +1,5 @@
 # IPsVE
-Lista y script para router Mikrotik de IPs Venezolanas.
+Lista y script para router Mikrotik (ROS V7.15 y superior) de IPs Venezolanas.
 
 
 ## Uso del script.
