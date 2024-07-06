@@ -160,7 +160,9 @@
 		:if (($charAt = "\n") || ($charAt = "\r")) do={
 			:set skipComment false;
 			:if ([:len $lineComment] > 0) do={
+				:put "";
 				[$putComment ("COMMENT: " . $lineComment)];
+				:put "";
 				:set lineComment "";
 			}
 			:if ([:len $line] > 0) do={
