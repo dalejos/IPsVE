@@ -5,7 +5,7 @@
 :local fileName "lista.txt";
 
 #Nombre de la lista para crear en /ip/firewall/address-list/
-:local listName "bancos";
+:local listName "ipsve";
 
 
 :local fetchFile;
@@ -139,12 +139,17 @@
 :set ($dataList->"segment") ({});
 :set ($dataList->"domain") ({});
 
-:local fetchResult [$fetchFile $urlFile $fileName];
+:if ([:len $urlFile] > 0) do={
+	:put "";
+	[$putInfo ("Descargando archivo: $urlFile")];
+	
+	:local fetchResult [$fetchFile $urlFile $fileName];
 
-:if (!(($fetchResult->"status") = "finished")) do={
-	[$putError ("Error descargando archivo: $urlFile, status: " . ($fetchResult->"status"))];
-} else={
-	:delay 2s
+	:if (!(($fetchResult->"status") = "finished")) do={
+		[$putError ("Error descargando archivo: $urlFile, status: " . ($fetchResult->"status"))];
+	} else={
+		:delay 2s
+	}
 }
 
 :local listFile [$loadFile $fileName];
