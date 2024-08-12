@@ -1,5 +1,6 @@
 #URL de la lista de IP, segmentos, AS y dominios.
-:local urlFile "https://raw.githubusercontent.com/dalejos/IPsVE/main/listas/lista.txt";
+#:local urlFile "https://raw.githubusercontent.com/dalejos/IPsVE/main/listas/lista.txt";
+:local urlFile "";
 
 #Nombre del archivo local donde se guardara la lista.
 :local fileName "lista.txt";
@@ -137,6 +138,7 @@
 :set ($dataList->"as") ({});
 :set ($dataList->"ipv4") ({});
 :set ($dataList->"segment") ({});
+:set ($dataList->"commentSegment") ({});
 :set ($dataList->"domain") ({});
 
 :if ([:len $urlFile] > 0) do={
@@ -249,12 +251,13 @@
 			:if (!([:find ($dataList->"segment") $segment] >= 0)) do={
 				:put "Cargando segmento: $segment";
 				:set ($dataList->"segment") (($dataList->"segment"), $segment);
+				:set ($dataList->"commentSegment"->"C$segment") (($jsonASOverview->"data"->"holder") . " - $resource");
 			} else={
 				[$putWarning ("Ignorando segmento duplicado: " . $segment)];
 			}
 		}
-	}	
-	
+	}
+		
 #Optimizando segmentos
 
 	:put "";
@@ -318,8 +321,9 @@
 	:foreach item in=($dataList->"segment") do={
 		:local addressId [/ip/firewall/address-list/find where list=$listName address=$item !dynamic];
 		:if (!([:len $addressId] > 0)) do={
+			:local commentSegment ($dataList->"commentSegment"->"C$item");
 			:put "Agregando $item a la lista $listName";
-			/ip/firewall/address-list/add address=$item list=$listName comment="script segment - $listName";
+			/ip/firewall/address-list/add address=$item list=$listName comment="script segment - $commentSegment";
 		} else={
 			[$putWarning ("Direccion " . $item . " ya existe en la lista " . $listName)];
 		}
