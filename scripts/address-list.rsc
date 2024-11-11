@@ -28,12 +28,46 @@
 :local dataRipe;
 :set dataRipe do={
     :local callBack $1;
-    :local urlParams $2;
-        
+    :local urlParams $2;	
+	:local fileName "cache/ripe/ripe.json";
+		
+	:local loadFile;
+	:set loadFile do={
+
+		:local result;
+		:local errorName "";
+		
+		:onerror error=errorName in={
+			:local fileId [/file/find where name=$1];
+			:if (!([:len $fileId] > 0)) do={
+				:error "Archivo $1 no encontrado.";
+			}		
+			:set result [/file/get $fileId];
+			:local cs 32768;
+			:local os 0;
+			:local data "";
+			:while ($os < ($result->"size")) do={
+				:set data ($data . ([/file/read file=($result->"name") offset=$os chunk-size=$cs as-value]->"data"));
+				:set os ($os + $cs);
+			}
+			:set ($result->"error") false;
+			:set ($result->"message") "";
+			:set ($result->"data") $data;
+		} do={
+			:set ($result->"error") true;
+			:set ($result->"message") $errorName;
+		}
+		:return $result;
+	}
+	
     do {
-        :local result [/tool fetch url="https://stat.ripe.net/data/$callBack/data.json?$urlParams" output=user as-value];
+        :local result [/tool/fetch url="https://stat.ripe.net/data/$callBack/data.json?$urlParams" output=file dst-path=$fileName as-value] 
         :if (($result->"status") = "finished") do={
-            :return ($result->"data");
+            :delay 2s;
+			:local jsonFile [$loadFile $fileName];
+			:if (!($jsonFile->"error")) do={
+				:return ($jsonFile->"data");
+			}
         }
     } on-error={
         :return "";
