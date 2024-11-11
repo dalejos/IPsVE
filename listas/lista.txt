@@ -333,6 +333,9 @@ AS28089 #BCV
 AS14231 #Banco de Venezuela
 AS52386 #Banco Nacional de Credito
 AS4944 #Petroleos de Venezuela
+AS21980 #Dayco
+AS27862 #Banesco
+AS262176 #Banco Exterior
 
 
 # Segmentos
