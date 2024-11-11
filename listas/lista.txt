@@ -329,6 +329,12 @@ AS263180 #CANTV OPSU
 AS262180 #CANTV NAP
 AS10293 #CANTV Servicios
 
+AS28089 #BCV
+AS14231 #Banco de Venezuela
+AS52386 #Banco Nacional de Credito
+AS4944 #Petroleos de Venezuela
+
+
 # Segmentos
 
 200.3.1.0/24
