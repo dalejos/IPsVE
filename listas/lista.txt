@@ -161,6 +161,7 @@ bancaenlineac2p.mibanco.com.ve
 mibanco.librepago.com
 2nuevomundo.com.ve
 adminpagos.bancamiga.com.ve
+appmovil.bancamiga.com
 alca-ftaa.org
 aqui.vzla.org
 asambleanacional.gov.ve
