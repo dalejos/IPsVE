@@ -1,6 +1,6 @@
 #URL de la lista de IP, segmentos, AS y dominios.
-#:local urlFile "https://raw.githubusercontent.com/dalejos/IPsVE/main/listas/lista.txt";
-:local urlFile "";
+:local urlFile "https://raw.githubusercontent.com/dalejos/IPsVE/main/listas/lista.txt";
+#:local urlFile "";
 
 #Nombre del archivo local donde se guardara la lista.
 :local fileName "lista.txt";
